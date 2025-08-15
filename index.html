@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinity Traveling in Space</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: black;
+        font-family: Arial, sans-serif;
+    }
+    canvas {
+        display: block;
+    }
+    h1 {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        text-align: center;
+        font-size: 2em;
+        color: white;
+        text-shadow: 0 0 10px cyan, 0 0 20px blue;
+        z-index: 10;
+    }
+    .control-panel {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.6);
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        font-size: 1.2em;
+        box-shadow: 0 0 10px cyan;
+    }
+    input[type=range] {
+        width: 300px;
+        accent-color: cyan;
+    }
+    .lightyear {
+        margin-top: 8px;
+        font-size: 1em;
+        color: yellow;
+        text-shadow: 0 0 5px yellow, 0 0 10px orange;
+    }
+</style>
+</head>
+<body>
+<h1>🚀 Infinity Traveling in Space 🌌</h1>
+<canvas id="space"></canvas>
+
+<div class="control-panel">
+    Speed: <span id="speedValue">4</span>
+    <br>
+    <input type="range" id="speedBar" min="1" max="20" value="4">
+    <div class="lightyear">Lightyears Traveled: <span id="lightyears">0</span></div>
+</div>
+
+<script>
+const canvas = document.getElementById("space");
+const ctx = canvas.getContext("2d");
+const speedBar = document.getElementById("speedBar");
+const speedValue = document.getElementById("speedValue");
+const lightyearsDisplay = document.getElementById("lightyears");
+
+let stars = [];
+const numStars = 700;
+let w, h;
+let speed = 4;
+let lightyears = 0;
+
+function init() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    stars = [];
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            z: Math.random() * w
+        });
+    }
+}
+window.onresize = init;
+
+speedBar.addEventListener("input", () => {
+    speed = Number(speedBar.value);
+    speedValue.textContent = speed;
+});
+
+function draw() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, w, h);
+
+    // Update lightyears traveled (fake simulation)
+    lightyears += speed * 0.05; // adjust multiplier for realism
+    lightyearsDisplay.textContent = lightyears.toFixed(2);
+
+    for (let i = 0; i < numStars; i++) {
+        let star = stars[i];
+        star.z -= speed;
+        if (star.z <= 0) {
+            star.x = Math.random() * w;
+            star.y = Math.random() * h;
+            star.z = w;
+        }
+
+        let k = 128.0 / star.z;
+        let sx = (star.x - w / 2) * k + w / 2;
+        let sy = (star.y - h / 2) * k + h / 2;
+
+        if (sx >= 0 && sx <= w && sy >= 0 && sy <= h) {
+            let size = (1 - star.z / w) * 3;
+            let stretch = speed > 10 ? speed / 2 : 0; // warp stretch effect
+            ctx.beginPath();
+            ctx.ellipse(sx, sy, size, size + stretch, 0, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${(star.z / w) * 360}, 100%, 80%)`;
+            ctx.fill();
+        }
+    }
+    requestAnimationFrame(draw);
+}
+
+init();
+draw();
+</script>
+</body>
+</html>
