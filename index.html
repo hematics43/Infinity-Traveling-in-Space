@@ -19,7 +19,7 @@
         top: 10px;
         width: 100%;
         text-align: center;
-        font-size: 2em;
+        font-size: 1em;
         color: white;
         text-shadow: 0 0 10px cyan, 0 0 20px blue;
         z-index: 10;
@@ -30,7 +30,7 @@
         left: 50%;
         transform: translateX(-50%);
         background: rgba(0,0,0,0.6);
-        padding: 10px 20px;
+        padding: 1px 2px;
         border-radius: 10px;
         color: white;
         text-align: center;
@@ -68,7 +68,7 @@ const speedValue = document.getElementById("speedValue");
 const lightyearsDisplay = document.getElementById("lightyears");
 
 let stars = [];
-const numStars = 700;
+const numStars = 1000;
 let w, h;
 let speed = 4;
 let lightyears = 0;
@@ -124,7 +124,6 @@ function draw() {
     }
     requestAnimationFrame(draw);
 }
-
 init();
 draw();
 </script>
